@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/playfair-display/400.css";
+@import "@fontsource/playfair-display/700.css";
+
+:root {
+  --bg-primary: #080A0F;
+  --bg-secondary: #0D1117;
+  --bg-tertiary: #121821;
+  --gold: #D4AF37;
+  --gold-light: #F2D675;
+  --text-primary: #F5F2EA;
+  --text-muted: #8B919C;
+  --border-subtle: rgba(212, 175, 55, 0.15);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  min-height: 100%;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-secondary); }
+::-webkit-scrollbar-thumb { background: var(--border-subtle); border-radius: 3px; }
+
+/* Font utilities */
+.font-playfair { font-family: 'Playfair Display', Georgia, serif; }
+.font-inter { font-family: 'Inter', system-ui, sans-serif; }
+
+/* Gold text */
+.text-gold { color: var(--gold); }
+.text-gold-light { color: var(--gold-light); }
+.text-muted { color: var(--text-muted); }
