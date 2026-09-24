@@ -187,7 +187,7 @@ export const PresentationMode: React.FC<PresentationModeProps> = ({
             }}
           >
             <Award size={13} />
-            Judges
+            Evaluation
           </button>
         </div>
 

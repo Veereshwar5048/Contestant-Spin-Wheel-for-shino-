@@ -5,7 +5,7 @@ import { setAudioEnabled } from '../utils/sound';
 const STORAGE_KEY = 'toastmasters_settings';
 
 const DEFAULT_SETTINGS: Settings = {
-  contestName: 'Humorous Speech Contest',
+  contestName: 'Humorous and Evaluation Speech Contest',
   clubName: '',
   date: '',
   venue: '',
@@ -36,7 +36,12 @@ interface UseSettingsReturn {
 export function useSettings(): UseSettingsReturn {
   const [settings, setSettings] = useState<Settings>(() => {
     const saved = safeGet<Partial<Settings>>(STORAGE_KEY, {});
-    return { ...DEFAULT_SETTINGS, ...saved };
+    const merged = { ...DEFAULT_SETTINGS, ...saved };
+    // Migrate: replace old default title with the new one
+    if (merged.contestName === 'Humorous Speech Contest') {
+      merged.contestName = DEFAULT_SETTINGS.contestName;
+    }
+    return merged;
   });
 
   useEffect(() => {
