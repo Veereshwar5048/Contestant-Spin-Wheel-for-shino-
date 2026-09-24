@@ -25,7 +25,8 @@ const RosterSection: React.FC<RosterSectionProps> = ({
   const [confirmReset, setConfirmReset] = useState(false);
   const [confirmRemoveId, setConfirmRemoveId] = useState<string | null>(null);
 
-  const title = kind === 'contestant' ? 'Contestants' : 'Evaluation Judges';
+  const title = kind === 'contestant' ? 'Contestants' : 'Evaluation';
+  const kindLabel = kind === 'contestant' ? 'contestant' : 'evaluation';
   const selected = people.filter(p => p.selected).length;
   const confirmRemovePerson = people.find(p => p.id === confirmRemoveId);
 
@@ -174,13 +175,13 @@ const RosterSection: React.FC<RosterSectionProps> = ({
           value={addName}
           onChange={e => { setAddName(e.target.value); setAddError(''); }}
           onKeyDown={e => { if (e.key === 'Enter') handleAdd(); }}
-          placeholder={`Add ${kind}…`}
+          placeholder={`Add ${kindLabel}…`}
           style={{ ...inputStyle, flex: 1 }}
-          aria-label={`Add new ${kind} name`}
+          aria-label={`Add new ${kindLabel} name`}
         />
         <button
           onClick={handleAdd}
-          aria-label={`Add ${kind}`}
+          aria-label={`Add ${kindLabel}`}
           style={actionBtn('var(--gold)', '#080A0F')}
         >
           <Plus size={14} />
@@ -192,7 +193,7 @@ const RosterSection: React.FC<RosterSectionProps> = ({
       {/* Reset confirmation modal */}
       <Modal isOpen={confirmReset} onClose={() => setConfirmReset(false)} title={`Reset ${title}`}>
         <p style={{ color: 'var(--text-muted)', fontSize: '0.85rem', marginBottom: '1.5rem' }}>
-          This will restore all {kind === 'contestant' ? '7 original contestants' : '4 original judges'} and clear selection history.
+          This will restore all {kind === 'contestant' ? '7 original contestants' : '4 original evaluations'} and clear selection history.
           This action cannot be undone.
         </p>
         <div style={{ display: 'flex', gap: '0.75rem', justifyContent: 'flex-end' }}>

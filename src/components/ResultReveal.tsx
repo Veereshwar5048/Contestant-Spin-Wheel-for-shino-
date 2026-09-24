@@ -21,10 +21,10 @@ export const ResultReveal: React.FC<ResultRevealProps> = ({
   const hasChimed = useRef(false);
   const liveRef = useRef<HTMLDivElement>(null);
 
-  const label = kind === 'contestant' ? 'THE CONTESTANT IS' : 'THE EVALUATION JUDGE IS';
+  const label = kind === 'contestant' ? 'THE CONTESTANT IS' : 'THE EVALUATION IS';
   const bottomLabel = kind === 'contestant'
     ? (isFinal ? 'FINAL CONTESTANT SELECTED' : 'CONTESTANT SELECTED')
-    : (isFinal ? 'FINAL JUDGE SELECTED' : 'EVALUATION JUDGE SELECTED');
+    : (isFinal ? 'FINAL EVALUATION SELECTED' : 'EVALUATION SELECTED');
 
   useEffect(() => {
     if (!isOpen) {

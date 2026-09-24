@@ -8,7 +8,7 @@ interface NavProps {
 const links = [
   { hash: '#/', label: 'Home', icon: Home },
   { hash: '#/contestants', label: 'Contestants', icon: Users },
-  { hash: '#/judges', label: 'Evaluation Judges', icon: Award },
+  { hash: '#/judges', label: 'Evaluation', icon: Award },
   { hash: '#/control', label: 'Control', icon: Settings },
   { hash: '#/present', label: 'Presentation', icon: Monitor },
 ];

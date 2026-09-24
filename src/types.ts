@@ -6,10 +6,11 @@ export interface Person {
 }
 
 export interface HistoryEntry {
+  id: string;
   personId: string;
   name: string;
   order: number;
-  timestamp: number;
+  timestamp: string;
 }
 
 export interface Settings {

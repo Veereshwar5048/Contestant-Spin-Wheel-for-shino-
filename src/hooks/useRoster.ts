@@ -77,9 +77,17 @@ export function useRoster({ kind }: UseRosterOptions): UseRosterReturn {
   const [people, setPeople] = useState<Person[]>(() =>
     safeGet<Person[]>(keys.roster, seedData),
   );
-  const [history, setHistory] = useState<HistoryEntry[]>(() =>
-    safeGet<HistoryEntry[]>(keys.history, []),
-  );
+  const [history, setHistory] = useState<HistoryEntry[]>(() => {
+    const raw = safeGet<any[]>(keys.history, []);
+    return raw.map((entry, idx) => ({
+      ...entry,
+      id: entry.id || `hist-${Date.now()}-${Math.random().toString(36).slice(2)}`,
+      order: entry.order ?? (idx + 1),
+      timestamp: typeof entry.timestamp === 'number' 
+        ? new Date(entry.timestamp).toISOString() 
+        : (entry.timestamp || new Date().toISOString()),
+    })) as HistoryEntry[];
+  });
   const [pendingRevealId, setPendingRevealId] = useState<string | null>(() =>
     safeGet<string | null>(keys.pending, null),
   );
@@ -99,10 +107,11 @@ export function useRoster({ kind }: UseRosterOptions): UseRosterReturn {
       const person = people.find(p => p.id === id);
       if (!person) return prev;
       const entry: HistoryEntry = {
+        id: `hist-${Date.now()}-${Math.random().toString(36).slice(2)}`,
         personId: id,
         name: person.name,
         order: nextOrder,
-        timestamp: Date.now(),
+        timestamp: new Date().toISOString(),
       };
       return [...prev, entry];
     });

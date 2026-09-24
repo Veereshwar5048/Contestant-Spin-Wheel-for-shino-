@@ -4,6 +4,7 @@ import { Home } from './pages/Home';
 import { WheelScreen } from './pages/WheelScreen';
 import { Dashboard } from './pages/Dashboard';
 import { PresentationMode } from './pages/PresentationMode';
+import { FinalOrderScreen } from './pages/FinalOrderScreen';
 import { Nav } from './components/Nav';
 import { useRoster } from './hooks/useRoster';
 import { useSettings } from './hooks/useSettings';
@@ -19,12 +20,21 @@ function useHashRoute(): string {
   return route;
 }
 
+const KNOWN_ROUTES = new Set([
+  '#/', '#/contestants', '#/judges', '#/control', '#/present',
+  '#/contestants/order', '#/judges/order',
+]);
+
 function App() {
   const route = useHashRoute();
   const { settings, updateSettings } = useSettings();
 
   const contestants = useRoster({ kind: 'contestant' });
   const judges = useRoster({ kind: 'judge' });
+
+  // isComplete: 0 unselected AND history length >= 1
+  const contestantComplete = contestants.people.filter(p => !p.selected).length === 0 && contestants.history.length >= 1;
+  const judgeComplete = judges.people.filter(p => !p.selected).length === 0 && judges.history.length >= 1;
 
   const handleToggleSound = useCallback(() => {
     initAudio();
@@ -60,9 +70,11 @@ function App() {
         contestantPeople={contestants.people}
         contestantHistory={contestants.history}
         contestantPending={contestants.pendingRevealId}
+        contestantComplete={contestantComplete}
         judgePeople={judges.people}
         judgeHistory={judges.history}
         judgePending={judges.pendingRevealId}
+        judgeComplete={judgeComplete}
         settings={settings}
         onToggleSound={handleToggleSound}
         onSelectContestant={contestants.selectPerson}
@@ -70,6 +82,45 @@ function App() {
         onSelectJudge={judges.selectPerson}
         onClearJudgePending={judges.clearPendingReveal}
       />
+    );
+  }
+
+  // Order screen routes — redirect if roster not complete
+  if (route === '#/contestants/order') {
+    if (!contestantComplete) {
+      window.location.hash = '#/contestants';
+      return null;
+    }
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <Nav currentRoute={route} />
+        <main style={{ flex: 1, overflow: 'auto' }}>
+          <FinalOrderScreen
+            kind="contestant"
+            history={contestants.history}
+            settings={settings}
+          />
+        </main>
+      </div>
+    );
+  }
+
+  if (route === '#/judges/order') {
+    if (!judgeComplete) {
+      window.location.hash = '#/judges';
+      return null;
+    }
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        <Nav currentRoute={route} />
+        <main style={{ flex: 1, overflow: 'auto' }}>
+          <FinalOrderScreen
+            kind="judge"
+            history={judges.history}
+            settings={settings}
+          />
+        </main>
+      </div>
     );
   }
 
@@ -89,6 +140,7 @@ function App() {
             onToggleSound={handleToggleSound}
             onSelectPerson={contestants.selectPerson}
             onClearPendingReveal={contestants.clearPendingReveal}
+            onFinalContinue={() => { window.location.hash = '#/contestants/order'; }}
           />
         )}
 
@@ -102,6 +154,7 @@ function App() {
             onToggleSound={handleToggleSound}
             onSelectPerson={judges.selectPerson}
             onClearPendingReveal={judges.clearPendingReveal}
+            onFinalContinue={() => { window.location.hash = '#/judges/order'; }}
           />
         )}
 
@@ -128,9 +181,7 @@ function App() {
         )}
 
         {/* Fallback */}
-        {!['#/', '#/contestants', '#/judges', '#/control', '#/present'].includes(route) && (
-          <Home settings={settings} />
-        )}
+        {!KNOWN_ROUTES.has(route) && <Home settings={settings} />}
       </main>
     </div>
   );

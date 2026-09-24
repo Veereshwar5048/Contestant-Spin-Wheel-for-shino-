@@ -6,13 +6,13 @@ interface ParticipantListProps {
   kind: 'contestant' | 'judge';
 }
 
-function formatTime(ts: number): string {
+function formatTime(ts: string): string {
   const d = new Date(ts);
   return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 }
 
 export const ParticipantList: React.FC<ParticipantListProps> = ({ history, kind }) => {
-  const title = kind === 'contestant' ? 'CONTESTANT SELECTION ORDER' : 'EVALUATION JUDGE ORDER';
+  const title = kind === 'contestant' ? 'CONTESTANT SELECTION ORDER' : 'EVALUATION ORDER';
 
   return (
     <div
